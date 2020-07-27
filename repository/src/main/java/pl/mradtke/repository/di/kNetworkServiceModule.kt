@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import pl.mradtke.repository.ApiClient
+import pl.mradtke.repository.api.ApiProvider
 import pl.mradtke.repository.api.IAvatarsApi
 import pl.mradtke.repository.api.IUsersApi
 import pl.mradtke.repository.interceptor.LogRequestInterceptor
@@ -22,6 +23,7 @@ private const val AVATARS_API_SCOPE_NAME = "AvatarsApiScopeName"
 
 val kNetworkServiceModule = module {
     single { ApiClient() }
+    factory { ApiProvider() }
 
     single {
         OkHttpClient.Builder()
@@ -31,7 +33,7 @@ val kNetworkServiceModule = module {
 
     single(named(USERS_API_SCOPE_NAME)) {
         Retrofit.Builder()
-            .baseUrl("https://api.github.com/")
+            .baseUrl(get<ApiProvider>().getUsersApiHostname())
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -39,7 +41,7 @@ val kNetworkServiceModule = module {
 
     single(named(AVATARS_API_SCOPE_NAME)) {
         Retrofit.Builder()
-            .baseUrl("https://api.dailymotion.com/")
+            .baseUrl(get<ApiProvider>().getAvatarsApiHostname())
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
