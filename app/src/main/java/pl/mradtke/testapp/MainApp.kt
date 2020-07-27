@@ -8,8 +8,6 @@ import org.koin.core.logger.Level
 import pl.mradtke.repository.di.kNetworkServiceModule
 
 /**
- *
- *
  * @author Michał Radtke
  * @version 27.07.2020
  */
