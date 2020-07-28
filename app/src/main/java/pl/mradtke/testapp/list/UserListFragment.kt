@@ -1,17 +1,20 @@
-package pl.mradtke.testapp
+package pl.mradtke.testapp.list
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import pl.mradtke.testapp.R
 import pl.mradtke.testapp.databinding.FragmentListUserBinding
-import pl.mradtke.testapp.list.UserListAdapter
+import pl.mradtke.testapp.details.UserDetailsActivity
 import pl.mradtke.testapp.viewmodel.UserListFragmentViewModel
 
 /**
@@ -40,8 +43,14 @@ class UserListFragment : Fragment() {
 
         val userAdapter = UserListAdapter().also {
             binding.adapter = it
-            it.setOnItemClickListener {
-                Log.d(TAG, "Item clicked!")
+            it.setOnItemClickListener { item, imageView ->
+                val intent = Intent(context, UserDetailsActivity::class.java).apply {
+                    putExtra(UserDetailsActivity.EXTRA_USER_ITEM, item)
+                }
+
+                val activityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(requireActivity(), imageView,
+                    getString(R.string.user_avatar_transition_name))
+                startActivity(intent, activityOptions.toBundle())
             }
         }
 

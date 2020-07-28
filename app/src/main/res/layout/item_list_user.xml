@@ -22,6 +22,7 @@
             android:id="@+id/item_list_user_avatar"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            android:transitionName="@string/user_avatar_transition_name"
             app:imageUrl="@{user.avatarUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/item_list_user_username"
