@@ -8,6 +8,7 @@ import pl.mradtke.repository.api.ApiProvider
 import pl.mradtke.repository.api.IAvatarsApi
 import pl.mradtke.repository.api.IUsersApi
 import pl.mradtke.repository.interceptor.LogRequestInterceptor
+import pl.mradtke.repository.provider.UserDataProvider
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -15,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Network service Koin module.
  *
  * @author Michał Radtke
- * @version 27.07.2020
+ * @version 28.07.2020
  */
 
 private const val USERS_API_SCOPE_NAME = "UsersApiScopeName"
@@ -24,6 +25,7 @@ private const val AVATARS_API_SCOPE_NAME = "AvatarsApiScopeName"
 val kNetworkServiceModule = module {
     single { ApiClient() }
     factory { ApiProvider() }
+    factory { UserDataProvider() }
 
     single {
         OkHttpClient.Builder()

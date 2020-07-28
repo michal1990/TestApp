@@ -5,7 +5,9 @@ import io.kotlintest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -14,18 +16,21 @@ import pl.mradtke.model.api.AvatarResponseItem
 import pl.mradtke.model.api.UserItemResponse
 import pl.mradtke.model.api.UserListResponse
 import pl.mradtke.repository.ApiClient
-import pl.mradtke.repository.RepositoryAndroidTest
 import pl.mradtke.repository.api.IAvatarsApi
 import pl.mradtke.repository.api.IUsersApi
+import pl.mradtke.repository.api.ResultWrapper
+import java.io.IOException
 
 /**
  * @author Michał Radtke
- * @version 27.07.2020
+ * @version 28.07.2020
  */
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
-class UserDataProviderTest : RepositoryAndroidTest() {
+class UserDataProviderTest  {
 
     private lateinit var dataProvider: UserDataProvider
+    private val testDispatcher = TestCoroutineDispatcher()
     private val avatarsApiMock = mockk<IAvatarsApi>()
     private val usersApiMock = mockk<IUsersApi>()
 
@@ -41,49 +46,75 @@ class UserDataProviderTest : RepositoryAndroidTest() {
     @Before
     fun setUp() {
         val mcClientMock = mockk<ApiClient>()
-        dataProvider = UserDataProvider(mcClientMock)
+        dataProvider = UserDataProvider(mcClientMock, testDispatcher)
         every { mcClientMock.avatarsApi } returns avatarsApiMock
         every { mcClientMock.usersApi } returns usersApiMock
     }
 
     @Test
-    fun getUserListAndCheckIfDataIsCorrectlyTransformed() {
+    fun getUserListWithSuccessResponse() {
         //Given
-        coEvery { avatarsApiMock.getAvatars() } returns avatarListResponse
         coEvery { usersApiMock.getUsers() } returns userListResponse
 
-        runBlocking {
+        runBlockingTest {
             //When
             val result = dataProvider.fetchUsers()
 
             //Then
-            result.size shouldBe 2
+            assert(result is ResultWrapper.Success)
+            result as ResultWrapper.Success
+            result.value.size shouldBe 2
 
-            val testFirstItem = result.first()
-            testFirstItem.avatarUrl shouldBe "https://www.deadpool.com/image.png"
-            testFirstItem.username shouldBe "Deadpool"
-            testFirstItem.userUrl shouldBe "https://www.deadpool.com"
+            val testFirstItem = result.value.first()
+            testFirstItem.url shouldBe "https://www.deadpool.com"
         }
     }
 
     @Test
-    fun whenFetchedNumberOfUsersIsLowerThanAvatarsThenResultListIsLimitedByUserList() {
+    fun getUserListWithErrorResponse() {
         //Given
-        coEvery { avatarsApiMock.getAvatars() } returns avatarListResponse
-        userListResponse.removeAt(1)
-        coEvery { usersApiMock.getUsers() } returns userListResponse
+        coEvery { usersApiMock.getUsers() } throws IOException()
 
-        runBlocking {
+        runBlockingTest {
             //When
             val result = dataProvider.fetchUsers()
 
             //Then
-            result.size shouldBe 1
+            assert(result is ResultWrapper.Failure)
+        }
+    }
 
-            val testFirstItem = result.first()
+    @Test
+    fun getAvatarsListWithSuccessResponse() {
+        //Given
+        coEvery { avatarsApiMock.getAvatars() } returns avatarListResponse
+
+        runBlockingTest {
+            //When
+            val result = dataProvider.fetchAvatars()
+
+            //Then
+            assert(result is ResultWrapper.Success)
+            result as ResultWrapper.Success
+            result.value.list.size shouldBe 2
+
+            val testFirstItem = result.value.list.first()
             testFirstItem.avatarUrl shouldBe "https://www.deadpool.com/image.png"
             testFirstItem.username shouldBe "Deadpool"
-            testFirstItem.userUrl shouldBe "https://www.deadpool.com"
+        }
+    }
+
+    @Test
+    fun getAvatarsListWithErrorResponse() {
+        //Given
+        coEvery { avatarsApiMock.getAvatars() } throws IOException()
+
+        runBlockingTest {
+            //When
+            val result = dataProvider.fetchAvatars()
+
+            //Then
+            assert(result is ResultWrapper.Failure)
         }
     }
 }

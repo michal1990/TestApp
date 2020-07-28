@@ -5,4 +5,14 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/user_list_fragment"
+        android:name="pl.mradtke.testapp.UserListFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:tag="@string/user_list_fragment_tag"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

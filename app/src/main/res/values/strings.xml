@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">TestApp</string>
+    <string name="app_name">MR - Test App</string>
+
+    <string name="user_list_fragment_tag">tag_user_list_fragment</string>
+    <string name="user_list_fragment_title">Github Users</string>
 </resources>
