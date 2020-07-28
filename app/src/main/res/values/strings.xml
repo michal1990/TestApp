@@ -2,5 +2,7 @@
     <string name="app_name">MR - Test App</string>
 
     <string name="user_list_fragment_tag">tag_user_list_fragment</string>
-    <string name="user_list_fragment_title">Github Users</string>
+    <string name="user_list_fragment_title">MR - Github Users</string>
+
+    <string name="user_details_activity_title">User Details</string>
 </resources>
