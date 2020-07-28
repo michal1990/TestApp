@@ -10,3 +10,7 @@
 -keep class com.bumptech.glide.load.data.ParcelFileDescriptorRewinder$InternalRewinder {
   *** rewind();
 }
+
+# Other
+-keep class pl.mradtke.testapp.list.UserListFragment** { *; }
+-keep class pl.mradtke.model** { *; }
