@@ -1,5 +1,7 @@
 package pl.mradtke.testapp.details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
@@ -11,7 +13,7 @@ import pl.mradtke.testapp.util.setImageUrl
 
 /**
  * @author Michał Radtke
- * @version 28.07.2020
+ * @version 29.07.2020
  */
 class UserDetailsActivity : AppCompatActivity() {
 
@@ -30,10 +32,13 @@ class UserDetailsActivity : AppCompatActivity() {
         }
 
         val userDetails = intent.getParcelableExtra<UserItem>(EXTRA_USER_ITEM)
-        userDetails?.let {
-            findViewById<ImageView>(R.id.user_details_image).setImageUrl(it.avatarUrl)
-            findViewById<TextView>(R.id.user_details_username).text = it.username
-            findViewById<TextView>(R.id.user_details_url).text = it.userUrl
+        userDetails?.let { details ->
+            findViewById<ImageView>(R.id.user_details_image).setImageUrl(details.avatarUrl)
+            findViewById<TextView>(R.id.user_details_username).text = details.username
+            findViewById<TextView>(R.id.user_details_url).apply {
+                text = details.userUrl
+                setOnClickListener { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(details.userUrl))) }
+            }
         }
     }
 
