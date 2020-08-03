@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="user_details_toolbar_height">130dp</dimen>
+    <dimen name="user_details_image_margin_top">35dp</dimen>
+</resources>
