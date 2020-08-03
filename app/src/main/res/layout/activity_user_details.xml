@@ -9,7 +9,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/details_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/user_details_toolbar_height"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,13 +23,12 @@
         android:layout_gravity="center"
         android:background="@drawable/white_circle_background"
         android:padding="8dp"
+        android:layout_marginTop="@dimen/user_details_image_margin_top"
         android:scaleType="centerCrop"
         android:transitionName="@string/user_avatar_transition_name"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1"
         tools:src="@drawable/ic_avatar_24" />
 
     <TextView
