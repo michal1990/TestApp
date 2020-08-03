@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="pl.mradtke.model.ui.UserItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item_list_article_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
+        android:padding="16dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/item_list_user_avatar"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:transitionName="@string/user_avatar_transition_name"
+            app:imageUrl="@{user.avatarUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_list_user_username"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_avatar_24" />
+
+        <TextView
+            android:id="@+id/item_list_user_username"
+            style="@style/TextAppearance.AppCompat.Medium"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{user.username}"
+            app:layout_constraintBottom_toTopOf="@id/item_list_user_url"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_list_user_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Deadpool" />
+
+        <TextView
+            android:id="@+id/item_list_user_url"
+            style="@style/TextAppearance.AppCompat.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@{user.userUrl}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/item_list_user_avatar"
+            app:layout_constraintTop_toBottomOf="@id/item_list_user_username"
+            tools:text="https://www.deadpool.com" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,30 +1,33 @@
 package pl.mradtke.repository.provider
 
-import pl.mradtke.model.ui.UserItem
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import pl.mradtke.model.api.AvatarListResponse
+import pl.mradtke.model.api.UserListResponse
 import pl.mradtke.repository.ApiClient
+import pl.mradtke.repository.api.ResultWrapper
+import pl.mradtke.repository.api.safeApiCall
 
 /**
  * Provider for users data.
  *
  * @author Michał Radtke
- * @version 27.07.2020
+ * @version 28.07.2020
  */
-class UserDataProvider(private val client: ApiClient = ApiClient()) {
+class UserDataProvider(private val client: ApiClient = ApiClient(),
+                       private val dispatcher: CoroutineDispatcher = Dispatchers.IO) {
 
     /**
-     * Fetch user list.
+     * Fetch users in a safe way.
      */
-    suspend fun fetchUsers(): List<UserItem> {
-        val users = client.usersApi.getUsers()
-        val avatars = client.avatarsApi.getAvatars()
-        val results = mutableListOf<UserItem>()
+    suspend fun fetchUsers(): ResultWrapper<UserListResponse> = safeApiCall(dispatcher) {
+        client.usersApi.getUsers()
+    }
 
-        avatars.list.mapIndexed { i, avatarItem ->
-            if (i == users.size)
-                return@mapIndexed
-            results.add(UserItem(avatarItem.username, users[i].url, avatarItem.avatarUrl))
-        }
-
-        return results
+    /**
+     * Fetch avatars in a safe way.
+     */
+    suspend fun fetchAvatars(): ResultWrapper<AvatarListResponse> = safeApiCall(dispatcher) {
+        client.avatarsApi.getAvatars()
     }
 }

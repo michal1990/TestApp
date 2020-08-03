@@ -7,10 +7,11 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import pl.mradtke.repository.di.kNetworkServiceModule
+import pl.mradtke.testapp.di.kAppModule
 
 /**
  * @author Michał Radtke
- * @version 27.07.2020
+ * @version 28.07.2020
  */
 class MainApp : Application() {
 
@@ -21,7 +22,7 @@ class MainApp : Application() {
             if (BuildConfig.DEBUG)
                 androidLogger(Level.DEBUG)
             androidContext(this@MainApp)
-            modules(listOf(kNetworkServiceModule))
+            modules(listOf(kAppModule, kNetworkServiceModule))
         }
 
         if (BuildConfig.DEBUG)
